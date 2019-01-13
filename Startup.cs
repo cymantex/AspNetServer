@@ -17,10 +17,12 @@ namespace AspNetServer {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSession();
+            services.AddCors();
 
-            // In production, the React files will be served from this directory
+            //In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => {
-                configuration.RootPath = "ClientApp/build";
+                configuration.RootPath = "Client/build";
             });
         }
 
@@ -33,6 +35,7 @@ namespace AspNetServer {
                 app.UseHsts();
             }
 
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
@@ -44,7 +47,7 @@ namespace AspNetServer {
             });
 
             app.UseSpa(spa => {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "Client";
 
                 if(env.IsDevelopment()) {
                     spa.UseReactDevelopmentServer(npmScript: "start");
